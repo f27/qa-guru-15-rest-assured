@@ -40,7 +40,6 @@ public class ApiTests extends TestBase {
         apiSteps
                 .register(postData)
                 .then()
-                .log().body()
                 .statusCode(200)
                 .body("id", is(notNullValue()))
                 .body("token", is(notNullValue()));
