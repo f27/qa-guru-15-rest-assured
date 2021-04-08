@@ -8,7 +8,7 @@ import static org.hamcrest.Matchers.notNullValue;
 
 public class ApiSteps {
 
-    @Step("Получаем список пользователей")
+    @Step("Получаем список пользователей со страницы {page}")
     public UsersData[] getUsers(int page) {
         return get("/api/users?page=" + page)
                 .jsonPath()
