@@ -1,0 +1,60 @@
+plugins {
+    id 'java-library'
+    id 'io.qameta.allure' version '2.8.1'
+}
+
+repositories {
+    mavenCentral()
+}
+
+def restAssuredVersion = "4.3.3",
+    javaFakerVersion = "1.0.2",
+    allureVersion = "2.13.9",
+    slf4jVersion = "1.7.29",
+    junitVersion = "5.7.1"
+
+allure {
+    version = allureVersion
+    autoconfigure = true
+    aspectjweaver = true
+    configuration = "testImplementation"
+    useJUnit5 {
+        version = allureVersion
+    }
+}
+
+dependencies {
+    testImplementation(
+            "org.aspectj:aspectjweaver:1.9.6",
+            "io.rest-assured:rest-assured:$restAssuredVersion",
+            "com.github.javafaker:javafaker:$javaFakerVersion",
+            "io.qameta.allure:allure-java-commons:$allureVersion",
+            "io.qameta.allure:allure-rest-assured:$allureVersion",
+            "org.slf4j:slf4j-simple:$slf4jVersion",
+            "org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(Test) {
+    systemProperties += System.properties
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task negative_tests(type: Test) {
+    useJUnitPlatform {
+        includeTags 'negative'
+    }
+}
+
+task positive_tests(type: Test) {
+    useJUnitPlatform {
+        includeTags 'positive'
+    }
+}
