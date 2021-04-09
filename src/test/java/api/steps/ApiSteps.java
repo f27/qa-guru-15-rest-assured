@@ -9,6 +9,7 @@ import io.qameta.allure.Step;
 import java.util.Map;
 
 import static api.spec.CustomSpec.customSpec;
+import static filter.LogFilter.filters;
 import static io.restassured.RestAssured.given;
 
 public class ApiSteps {
@@ -16,6 +17,7 @@ public class ApiSteps {
     @Step("Получаем список пользователей со страницы {page}")
     public UsersData[] getUsers(int page) {
         return given(customSpec)
+                .filter(filters().withCustomTemplates())
                 .get("/api/users?page=" + page)
                 .then()
                 .statusCode(200)
@@ -27,6 +29,7 @@ public class ApiSteps {
     @Step("Проверяем пользователя с id {id}")
     public UserData checkUser(String id) {
         return given(customSpec)
+                .filter(filters().withCustomTemplates())
                 .get("/api/users/" + id)
                 .then()
                 .statusCode(200)
@@ -38,6 +41,7 @@ public class ApiSteps {
     @Step("Регистрация с данными {data}")
     public Register register(Map<String, String> data, int statusCode) {
         return given(customSpec)
+                .filter(filters().withCustomTemplates())
                 .body(data)
                 .post("/api/register")
                 .then()
@@ -49,6 +53,7 @@ public class ApiSteps {
     @Step("Вход с данными {data}")
     public Login login(Map<String, String> data, int statusCode) {
         return given(customSpec)
+                .filter(filters().withCustomTemplates())
                 .body(data)
                 .post("/api/login")
                 .then()
@@ -60,6 +65,7 @@ public class ApiSteps {
     @Step("Удаление пользователя с id {id}")
     public void deleteUser(int id) {
         given(customSpec)
+                .filter(filters().withCustomTemplates())
                 .delete("/api/users/" + id)
                 .then()
                 .statusCode(204);
