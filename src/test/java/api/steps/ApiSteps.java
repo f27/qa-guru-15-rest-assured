@@ -4,7 +4,6 @@ import api.model.Login;
 import api.model.Register;
 import api.model.UserData;
 import api.model.UsersData;
-import api.spec.CustomSpec;
 import io.qameta.allure.Step;
 import java.util.Map;
 
