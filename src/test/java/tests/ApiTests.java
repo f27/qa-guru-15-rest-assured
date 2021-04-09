@@ -1,5 +1,6 @@
 package tests;
 
+import api.model.Register;
 import api.model.UsersData;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -24,7 +26,7 @@ public class ApiTests extends TestBase {
         UsersData[] usersDataList;
         while ((usersDataList = apiSteps.getUsers(i)).length > 0) {
             for (UsersData userData : usersDataList) {
-                apiSteps.checkUser(userData.getId());
+                assertThat(apiSteps.checkUser(userData.getId()).getId(), is(notNullValue()));
             }
             i++;
         }
@@ -37,12 +39,10 @@ public class ApiTests extends TestBase {
             put("email", "eve.holt@reqres.in");
             put("password", "pistol");
         }};
-        apiSteps
-                .register(postData)
-                .then()
-                .statusCode(200)
-                .body("id", is(notNullValue()))
-                .body("token", is(notNullValue()));
+        Register register = apiSteps.register(postData, 200);
+
+        assertThat(register.getId(), is(notNullValue()));
+        assertThat(register.getToken(), is(notNullValue()));
     }
 
     @Test
@@ -51,10 +51,8 @@ public class ApiTests extends TestBase {
         Map<String, String> postData = new HashMap<String, String>() {{
             put("email", "eve.holt@reqres.in");
         }};
-        apiSteps.register(postData)
-                .then()
-                .statusCode(400)
-                .body("error", is("Missing password"));
+
+        assertThat(apiSteps.register(postData, 400).getError(), is("Missing password"));
     }
 
     @Test
@@ -64,10 +62,8 @@ public class ApiTests extends TestBase {
             put("email", "eve.holt@reqres.in");
             put("password", "pistol");
         }};
-        apiSteps.login(postData)
-                .then()
-                .statusCode(200)
-                .body("token", is(notNullValue()));
+
+        assertThat(apiSteps.login(postData, 200).getToken(), is(notNullValue()));
     }
 
     @Test
@@ -76,18 +72,14 @@ public class ApiTests extends TestBase {
         Map<String, String> postData = new HashMap<String, String>() {{
             put("email", "eve.holt@reqres.in");
         }};
-        apiSteps.login(postData)
-                .then()
-                .statusCode(400)
-                .body("error", is("Missing password"));
+
+        assertThat(apiSteps.login(postData, 400).getError(), is("Missing password"));
     }
 
     @Test
     @DisplayName("Проверка удаления пользователя")
     void deleteUserTest() {
-        apiSteps.deleteUser(1)
-                .then()
-                .statusCode(204);
+        apiSteps.deleteUser(1);
     }
 
 }

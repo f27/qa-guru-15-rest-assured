@@ -14,6 +14,8 @@ public class CustomSpec {
             .log().uri()
             .when();
 
+
+
     public static CustomSpec spec() {
         return new CustomSpec();
     }

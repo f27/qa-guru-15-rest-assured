@@ -1,13 +1,14 @@
 package api.steps;
 
+import api.model.Login;
+import api.model.Register;
+import api.model.UserData;
 import api.model.UsersData;
 import io.qameta.allure.Step;
-import io.restassured.response.Response;
 
 import java.util.Map;
 
 import static api.spec.CustomSpec.spec;
-import static org.hamcrest.Matchers.notNullValue;
 
 public class ApiSteps {
 
@@ -15,35 +16,52 @@ public class ApiSteps {
     public UsersData[] getUsers(int page) {
         return spec().request()
                 .get("/api/users?page=" + page)
+                .then()
+                .statusCode(200)
+                .extract()
                 .jsonPath()
                 .getObject("data", UsersData[].class);
     }
 
     @Step("Проверяем пользователя с id {id}")
-    public void checkUser(String id) {
-        spec().request()
+    public UserData checkUser(String id) {
+        return spec().request()
                 .get("/api/users/" + id)
                 .then()
-                .body("data.id", notNullValue());
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getObject("data", UserData.class);
     }
 
     @Step("Регистрация с данными {data}")
-    public Response register(Map<String, String> data) {
+    public Register register(Map<String, String> data, int statusCode) {
         return spec().request()
                 .body(data)
-                .post("/api/register");
+                .post("/api/register")
+                .then()
+                .statusCode(statusCode)
+                .extract()
+                .as(Register.class);
     }
 
     @Step("Вход с данными {data}")
-    public Response login(Map<String,String> data) {
+    public Login login(Map<String, String> data, int statusCode) {
         return spec().request()
                 .body(data)
-                .post("/api/login");
+                .post("/api/login")
+                .then()
+                .statusCode(statusCode)
+                .extract()
+                .as(Login.class);
     }
 
     @Step("Удаление пользователя с id {id}")
-    public Response deleteUser(int id) {
-        return spec().request()
-                .delete("/api/users/"+id);
+    public void deleteUser(int id) {
+        spec().request()
+                .delete("/api/users/" + id)
+                .then()
+                .statusCode(204)
+                .extract();
     }
 }
