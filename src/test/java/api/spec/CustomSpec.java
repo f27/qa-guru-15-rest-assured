@@ -1,6 +1,5 @@
 package api.spec;
 
-import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
@@ -11,7 +10,7 @@ public class CustomSpec {
     private final RequestSpecification request = given()
             .baseUri("https://reqres.in")
             .contentType(ContentType.JSON)
-            .filter(new AllureRestAssured())
+            .filter(filters().withCustomTemplates())
             .log().uri()
             .when();
 
