@@ -8,6 +8,6 @@ public class TestBase {
 
     @BeforeAll
     static void init() {
-        apiSteps = new ApiSteps();
+
     }
 }
