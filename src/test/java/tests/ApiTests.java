@@ -1,7 +1,6 @@
 package tests;
 
 import api.model.UsersData;
-import api.steps.ApiSteps;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -21,7 +20,6 @@ public class ApiTests extends TestBase {
     @Test
     @DisplayName("Проверка, что у всех пользователей не пустой id")
     void accountsTest() {
-        apiSteps = new ApiSteps();
         int i = 1;
         UsersData[] usersDataList;
         while ((usersDataList = apiSteps.getUsers(i)).length > 0) {
@@ -35,7 +33,6 @@ public class ApiTests extends TestBase {
     @Test
     @DisplayName("Проверка успешной регистрации")
     void successfulRegistrationTest() {
-        apiSteps = new ApiSteps();
         Map<String, String> postData = new HashMap<String, String>() {{
             put("email", "eve.holt@reqres.in");
             put("password", "pistol");
@@ -51,7 +48,6 @@ public class ApiTests extends TestBase {
     @Test
     @DisplayName("Проверка регистрации без пароля")
     void registrationWithoutPasswordTest() {
-        apiSteps = new ApiSteps();
         Map<String, String> postData = new HashMap<String, String>() {{
             put("email", "eve.holt@reqres.in");
         }};
@@ -64,7 +60,6 @@ public class ApiTests extends TestBase {
     @Test
     @DisplayName("Проверка успешного входа")
     void successfulLoginTest() {
-        apiSteps = new ApiSteps();
         Map<String, String> postData = new HashMap<String, String>() {{
             put("email", "eve.holt@reqres.in");
             put("password", "pistol");
@@ -78,7 +73,6 @@ public class ApiTests extends TestBase {
     @Test
     @DisplayName("Проверка входа без пароля")
     void unsuccessfulLoginTest() {
-        apiSteps = new ApiSteps();
         Map<String, String> postData = new HashMap<String, String>() {{
             put("email", "eve.holt@reqres.in");
         }};
@@ -91,7 +85,6 @@ public class ApiTests extends TestBase {
     @Test
     @DisplayName("Проверка удаления пользователя")
     void deleteUserTest() {
-        apiSteps = new ApiSteps();
         apiSteps.deleteUser(1)
                 .then()
                 .statusCode(204);
