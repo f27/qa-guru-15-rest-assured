@@ -3,8 +3,6 @@ package filter;
 import io.qameta.allure.restassured.AllureRestAssured;
 
 public class LogFilter {
-    private static final AllureRestAssured FILTER = new AllureRestAssured();
-
     private static class InitLogFilter {
         private static final LogFilter logFilter = new LogFilter();
     }
@@ -14,6 +12,7 @@ public class LogFilter {
     }
 
     public AllureRestAssured withCustomTemplates() {
+        AllureRestAssured FILTER = new AllureRestAssured();
         FILTER.setRequestTemplate("request.ftl");
         FILTER.setResponseTemplate("response.ftl");
         return FILTER;
